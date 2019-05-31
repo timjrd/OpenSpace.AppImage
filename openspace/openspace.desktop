@@ -4,7 +4,7 @@ Exec=OpenSpace
 Name=OpenSpace
 Comment=Open source astrovisualization project
 Icon=openspace
-Categories=Application;Science;Graphics;
+Categories=Science;
 StartupWMClass=SGCT
 Terminal=false
 

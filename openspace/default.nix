@@ -81,10 +81,7 @@ gcc8Stdenv.mkDerivation rec {
     update ${raw}/scripts \$base/scripts
     update ${raw}/shaders \$base/shaders
     
-    [[ ! -e \$base/openspace.cfg ]] && cat > \$base/openspace.cfg <<END
-    BASE = os.getenv('HOME') .. '/.openspace'
-    dofile('${raw}/openspace.cfg')    
-    END
+    [[ ! -e \$base/openspace.cfg ]] && echo 'dofile(\"${raw}/openspace.cfg\")' > \$base/openspace.cfg
     
     extraFlagsArray=(--file \$base/openspace.cfg)
   '';
