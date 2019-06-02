@@ -1,10 +1,10 @@
-{ gcc8Stdenv, writers, fetchFromGitHub, cmake, pkg-config
+{ stdenvNoCC, gcc8Stdenv, coreutils, writers, fetchFromGitHub, cmake, pkg-config
 , boost, glib, pcre, libpng, bzip2, minizip, curl, gdal
 , glew, vulkan-loader, freeimage, libdevil, harfbuzz
 , libX11, libXxf86vm, libXext, libXi, libXcursor, libXrandr, libXinerama
 , nodejs-8_x }:
 
-gcc8Stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   name = "openspace-${version}";
   version = "0.14.0";
   
@@ -66,6 +66,7 @@ gcc8Stdenv.mkDerivation rec {
     cp ${wrapper} $out/bin/OpenSpace
   '';
   wrapper = writers.writeBash "openspace-wrapper-${version}.sh" ''
+    PATH=${coreutils}/bin:$PATH
     function update {
       [[ ( ! -e $2 ) || ( -L $2 ) ]] && ln -snf $1 $2
     }
@@ -95,7 +96,7 @@ gcc8Stdenv.mkDerivation rec {
     exec ${raw}/bin/OpenSpace "$@" "''${args[@]}"
   '';
   
-  meta = with gcc8Stdenv.lib; {
+  meta = with stdenvNoCC.lib; {
     description = "Open source astrovisualization project";
     longDescription = ''
       OpenSpace is open source interactive data visualization software
