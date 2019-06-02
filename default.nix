@@ -34,8 +34,7 @@ non-nixos' = root: pkgs.stdenvNoCC.mkDerivation rec {
   '';
   
   # see https://github.com/NixOS/nixpkgs/issues/9415#issuecomment-139655485
-  rpath   = builtins.concatStringsSep ":" (map (x: root+x) opengl.libdirs);
-  wrapper = ''
+  wrapper = let mkpath = xs: builtins.concatStringsSep ":" (map (x: root+x) xs); in ''
     PATH=${pkgs.patchelf}/bin:${pkgs.coreutils}/bin:$PATH
     shim=$HOME/.openspace/shim
     rm -rf $shim
@@ -46,12 +45,13 @@ non-nixos' = root: pkgs.stdenvNoCC.mkDerivation rec {
         dst=$shim/$lib
         if [[ -e $src ]]; then
           cp --dereference --no-preserve=all $src $dst
-          patchelf --set-rpath ${rpath} $dst
+          patchelf --set-rpath ${mkpath opengl.libdirs} $dst
           break
         fi
       done
     done
     export LD_LIBRARY_PATH=$shim:$LD_LIBRARY_PATH
+    export LIBGL_DRIVERS_PATH=${mkpath opengl.LIBGL_DRIVERS_PATH}:$LIBGL_DRIVERS_PATH
   '';
 };
 

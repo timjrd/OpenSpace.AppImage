@@ -1,4 +1,8 @@
 {
+  LIBGL_DRIVERS_PATH = [
+    "/usr/lib/x86_64-linux-gnu/dri"
+  ];
+  
   libdirs = [
     "/usr/lib/x86_64-linux-gnu"
   ];
